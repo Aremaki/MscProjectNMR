@@ -22,6 +22,7 @@ def split_dataset(dataset, train_prop=0.8, val_prop=0.2):
     dataset_size = sum(1 for _ in dataset)
     train_size = int(train_prop * dataset_size)
     val_size = int(val_prop * dataset_size)
+    dataset = dataset.shuffle(dataset_size)
     train_dataset = dataset.take(train_size)
     remaining_dataset = dataset.skip(train_size)
     val_dataset = remaining_dataset.take(val_size)
