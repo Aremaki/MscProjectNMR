@@ -1,2 +1,2 @@
-from .read import get_dataset
+from .read import read_tfrecords
 from .write import write_tfrecords
