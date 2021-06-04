@@ -64,7 +64,7 @@ def write_tfrecords(dataset=None, size=1000, number=None):
         number += 1
     
     for i in range(number):
-        filename = 'data_{}.tfrecord'.format(i)
+        filename = '../data/tfrecords/data_{}.tfrecord'.format(i)
         data_to_write = serialized_dataset.take(size)
         serialized_dataset = serialized_dataset.skip(size)
         writer = tf.data.experimental.TFRecordWriter(filename)

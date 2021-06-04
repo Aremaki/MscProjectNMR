@@ -19,12 +19,12 @@ def parse_tfr_element(element):
     return X, y
 
 
-def get_dataset(filenames):
+def read_tfrecords(filenames):
     """Import the tfrecord file into a TFRecordDataset"""
-    #create the dataset
+    # create the dataset
     dataset = tf.data.TFRecordDataset(filenames)
 
-    #pass every single feature through our mapping function
+    # pass every single feature through our mapping function
     dataset = dataset.map(parse_tfr_element)
 
     return dataset
