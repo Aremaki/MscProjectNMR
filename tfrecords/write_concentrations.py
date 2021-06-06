@@ -1,28 +1,8 @@
 import tensorflow as tf
-
-# The following three functions can be used to convert a value to a type compatible
-# with tf.train.Example.
+from tfrecords.write import _bytes_feature, serialize_array
 
 
-def _bytes_feature(value):
-    """Returns a bytes_list from a string / byte."""
-    if isinstance(value, type(tf.constant(0))): # if value ist tensor
-        value = value.numpy() # get value of tensor
-    return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
-
-
-def serialize_array(array):
-    """Returns a serialized string from a tensor"""
-    array = tf.io.serialize_tensor(array)
-    return array
-
-
-def _int64_feature(value):
-    """Returns an int64_list from a bool / enum / int / uint."""
-    return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
-
-
-def serialize_example(X, y):
+def serialize_example_concentrations(X, Y):
     """
     Creates a tf.train.Example message ready to be written to a file.
     """
@@ -30,7 +10,7 @@ def serialize_example(X, y):
     # data type.
     feature = {
       'X': _bytes_feature(serialize_array(X)),
-      'y': _int64_feature(y),
+      'Y': _bytes_feature(serialize_array(Y)),
     }
 
     # Create a Features message using tf.train.Example.
@@ -39,20 +19,20 @@ def serialize_example(X, y):
     return example_proto.SerializeToString()
 
 
-def tf_serialize_example(X, y):
-    tf_string = tf.py_function(serialize_example, (X, y), tf.string)
+def tf_serialize_example_concentrations(X, Y):
+    tf_string = tf.py_function(serialize_example_concentrations, (X, Y), tf.string)
     return tf.reshape(tf_string, ()) # The result is a scalar
 
 
-def write_tfrecords(path, dataset=None, size=1000, number=None):
+def write_tfrecords_concentrations(path, dataset=None, size=1000, number=None):
     """
-    :param dataset: tf.data object containing the examples (X: tf.float32, y: tf.int64)
+    :param dataset: tf.data object containing the examples (X: array(tf.float32), Y: array(tf.float32))
     :param size: Number of example in each tfrecord file
     :param number: Number of files
     :return: Create the tfrecord files
     """
 
-    serialized_dataset = dataset.map(tf_serialize_example)
+    serialized_dataset = dataset.map(tf_serialize_example_concentrations)
 
     if number:
         #The number has priority over the size
