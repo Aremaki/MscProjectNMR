@@ -10,3 +10,4 @@ pydot==1.4.1
 tensorflow==2.3.0
 tensorflow-probability==0.11.0
 tensorflow_datasets==4.1.0
+openpyxl==3.0.7

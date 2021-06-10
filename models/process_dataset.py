@@ -22,7 +22,7 @@ def split_dataset(dataset, train_prop=0.8, val_prop=0.2):
     dataset_size = sum(1 for _ in dataset)
     train_size = int(train_prop * dataset_size)
     val_size = int(val_prop * dataset_size)
-    dataset = dataset.shuffle(dataset_size)
+    
     train_dataset = dataset.take(train_size)
     remaining_dataset = dataset.skip(train_size)
     val_dataset = remaining_dataset.take(val_size)
@@ -34,25 +34,23 @@ def process_dataset(dataset, batch_sizes=None, shuffle_buffers=None, train_prop=
     """
     :param dataset: TFRecordDataset object
     :param batch_sizes: list of batch_size for train set, validation set and test set
-    :param shuffle_buffers: list of shuffle_buffer for train set, validation set and test set
+    :param shuffle_buffers: an integer shuffle_buffer for the train set only
     :param train_prop: the ratio between the full dataset size and the train set size
     :param val_prop: the ratio between the full dataset size and the validation set size
     :return: fully processed train, validation and test TFRecordDataset
     """
 
-    if shuffle_buffers is None:
-        shuffle_buffers = [None, None, None]
     if batch_sizes is None:
         batch_sizes = [64, 64, 64]
-    if len(shuffle_buffers) != 3 or len(batch_sizes) != 3:
-        return "Error: shuffle_buffers and batch_sizes should have a length of 3."
+    if type(shuffle_buffers) != int:
+        return "Error: shuffle_buffers should be an integer"
+    if len(batch_sizes) != 3:
+        return "Error: batch_sizes should have a length of 3."
 
     train_dataset, val_dataset, test_dataset = split_dataset(dataset, train_prop, val_prop)
-    train_dataset = shuffle_and_batch_dataset(train_dataset, batch_sizes[0], shuffle_buffers[0])
+    train_dataset = shuffle_and_batch_dataset(train_dataset, batch_sizes[0], shuffle_buffers)
     train_dataset = train_dataset.prefetch(tf.data.experimental.AUTOTUNE)
-    val_dataset = shuffle_and_batch_dataset(val_dataset, batch_sizes[1], shuffle_buffers[1])
-    val_dataset = val_dataset.prefetch(tf.data.experimental.AUTOTUNE)
-    test_dataset = shuffle_and_batch_dataset(test_dataset, batch_sizes[2], shuffle_buffers[2])
-    test_dataset = test_dataset.prefetch(tf.data.experimental.AUTOTUNE)
+    val_dataset = val_dataset.batch(batch_sizes[1]).prefetch(tf.data.experimental.AUTOTUNE)
+    test_dataset = test_dataset.batch(batch_sizes[2]).prefetch(tf.data.experimental.AUTOTUNE)
 
     return train_dataset, val_dataset, test_dataset
