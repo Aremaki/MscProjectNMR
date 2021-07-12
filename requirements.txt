@@ -1,4 +1,4 @@
-numpy==1.18.5
+numpy==1.19.2
 scipy==1.4.1
 matplotlib==3.3.1
 scikit-learn==0.23.2
@@ -7,7 +7,7 @@ seaborn==0.10.1
 jupyter==1.0.0
 ipykernel==5.2.1
 pydot==1.4.1
-tensorflow==2.3.0
+tensorflow==2.5.0
 tensorflow-probability==0.11.0
 tensorflow_datasets==4.1.0
 openpyxl==3.0.7

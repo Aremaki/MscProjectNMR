@@ -1,3 +1,3 @@
 from .callbacks import CheckpointCallback
-from .mlp import get_simple_mlp, get_regularised_bn_dropout_mlp, get_simple_mlp_concentrations, get_regularised_bn_dropout_mlp_concentrations
+from .mlp import get_simple_classifier_mlp, get_regularised_bn_dropout_classifier_mlp, get_simple_mutli_regressor_mlp, get_regularised_bn_dropout_mutli_regressor_mlp
 from .process_dataset import process_dataset
