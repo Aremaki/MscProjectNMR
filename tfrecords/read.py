@@ -21,10 +21,14 @@ def parse_tfr_element(element):
 
 def read_tfrecords(filenames):
     """Import the tfrecord file into a TFRecordDataset"""
+    
     # create the dataset
-    dataset = tf.data.TFRecordDataset(filenames)
+    dataset = tf.data.TFRecordDataset(filenames, num_parallel_reads=tf.data.experimental.AUTOTUNE)
 
     # pass every single feature through our mapping function
-    dataset = dataset.map(parse_tfr_element)
+    dataset = dataset.map(parse_tfr_element, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+    
+    # Batch and prefetch
+    dataset = dataset.batch(batch_size).prefetch(tf.data.experimental.AUTOTUNE)
 
     return dataset

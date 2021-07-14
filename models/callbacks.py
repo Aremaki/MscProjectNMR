@@ -2,6 +2,8 @@ import tensorflow as tf
 import numpy as np
 import time
 import joblib
+import os
+import matplotlib.pyplot as plt
 
 class CheckpointCallback(tf.keras.callbacks.Callback):
     """Define the CheckpointCallback to save the model"""
@@ -28,8 +30,8 @@ class CheckpointCallback(tf.keras.callbacks.Callback):
             self.manager.save()
             
     def on_train_end(self,logs = {}):
-#         plt.xlabel('Epoch')
-#         plt.ylabel('Total time taken until an epoch in seconds')
-#         plt.plot(*zip(*self.times))
-#         plt.show()
-        joblib.dump(self.times, self.directory + '\recorded_times')
+        plt.xlabel('Epoch')
+        plt.ylabel('Total time taken until an epoch in seconds')
+        plt.plot(*zip(*self.times))
+        plt.show()
+        joblib.dump(self.times, os.path.join(self.directory, 'recorded_times'))

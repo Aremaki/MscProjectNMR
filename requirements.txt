@@ -7,7 +7,8 @@ seaborn==0.10.1
 jupyter==1.0.0
 ipykernel==5.2.1
 pydot==1.4.1
-tensorflow==2.5.0
-tensorflow-probability==0.11.0
-tensorflow_datasets==4.1.0
+tensorflow==2.4.2
+tensorflow-probability==0.12.2
+tensorflow_datasets==4.3.0
 openpyxl==3.0.7
+numba==0.53.1
